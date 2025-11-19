@@ -1,0 +1,103 @@
+= MainWindow
+
+// Метаданные для машинной читаемости
+:component: MainWindow
+:tags: [компонент, mainwindow, gui, pyqt5, интерфейс]
+:dependencies: [PyQt5.QtWidgets, VCASClient, Config, ChannelTreeWidget]
+:related: [architecture/system-design.adoc, components/VCASClient.adoc, components/Config.adoc]
+
+== Назначение
+
+MainWindow - главный класс графического интерфейса приложения VCAS Server Viewer. Наследуется от QMainWindow и координирует все компоненты GUI в двухпанельном интерфейсе.
+
+== Основные функции
+
+* Управление жизненным циклом приложения
+* Координация взаимодействия между GUI элементами и VCASClient
+* Обработка пользовательского ввода через меню, панели инструментов и клавиши навигации
+* Отображение статуса подключения и информации о каналах
+* Управление двухпанельным интерфейсом с настройкой ширины и скрытием правой панели
+* Сохранение и восстановление настроек интерфейса
+
+== Структура класса
+
+=== Атрибуты
+* **vcas_client**: Экземпляр VCASClient для взаимодействия с сервером
+* **logger**: Логгер для записи событий
+* **channel_tree**: Экземпляр ChannelTreeWidget для отображения каналов
+* **channel_info**: Экземпляр ChannelInfoWidget для отображения информации
+* **status_bar**: Статус-бар для отображения сообщений
+* **mode_label, connection_label, channels_label**: Метки в статус-баре
+
+=== Основные методы
+
+==== Инициализация
+* **__init__()**: Инициализация окна, настройка UI, клиента и соединений
+* **setup_logging()**: Настройка логирования в файл и консоль
+* **setup_ui()**: Создание интерфейса с splitter, меню, toolbar, status bar
+* **setup_connections()**: Подключение сигналов между компонентами
+
+==== Взаимодействие с сервером
+* **connect_to_server()**: Подключение к VCAS серверу через VCASClient
+* **disconnect_from_server()**: Отключение от сервера
+* **refresh_channels()**: Обновление списка каналов
+* **clear_cache()**: Очистка кэша VCASClient
+* **force_refresh_channels()**: Принудительное обновление с очисткой кэша
+
+==== Обработчики сигналов
+* **on_connected()**: Обработка успешного подключения, запрос списка каналов
+* **on_disconnected()**: Обработка отключения, очистка дерева каналов
+* **on_error(error_msg)**: Отображение ошибок в QMessageBox
+* **on_channels_updated(channels)**: Обновление ChannelTreeWidget
+* **on_channel_selected(channel_name)**: Запрос информации о канале
+* **on_channel_info_updated(info)**: Обновление ChannelInfoWidget
+
+== Взаимодействия
+
+* **С VCASClient**: Через сигналы connected, disconnected, error, channels_updated, channel_info_updated
+* **С ChannelTreeWidget**: Через сигнал channel_selected для запроса информации
+* **С Config**: Использует Config для получения адреса сервера и размеров окна
+
+== Диаграмма последовательности
+
+[plantuml, mainwindow-sequence, png]
+----
+@startuml
+Пользователь -> MainWindow: Запуск приложения
+MainWindow -> VCASClient: Создание экземпляра
+Пользователь -> MainWindow: Нажатие "Подключиться"
+MainWindow -> VCASClient: connect_to_server()
+VCASClient -> Сервер: TCP подключение
+Сервер -> VCASClient: connected
+VCASClient -> MainWindow: сигнал connected
+MainWindow -> VCASClient: get_channels_list()
+VCASClient -> Сервер: name:ChannelsList|method:get
+Сервер -> VCASClient: name:ChannelsList|val:...
+VCASClient -> MainWindow: channels_updated
+MainWindow -> ChannelTreeWidget: Обновление дерева
+@enduml
+----
+
+== Зависимости
+
+* PyQt5.QtWidgets: QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QTreeWidget, QTextEdit, QStatusBar, QMenuBar, QToolBar, QAction, QLabel, QMessageBox, QApplication
+* PyQt5.QtCore: Qt, pyqtSignal
+* PyQt5.QtGui: QIcon, QFont
+* config: Config
+* vcas_client: VCASClient
+* logging
+
+== Примеры использования
+
+[source,python]
+----
+# Создание главного окна
+main_window = MainWindow()
+main_window.show()
+----
+
+Связанные компоненты:
+
+* xref:components/VCASClient.adoc[VCASClient] - клиент для сервера
+* xref:components/Config.adoc[Config] - конфигурация приложения
+* xref:components/ChannelTreeWidget.adoc[ChannelTreeWidget] - дерево каналов

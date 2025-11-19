@@ -1,0 +1,102 @@
+= Документация VCAS Server Viewer
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:sectanchors:
+
+// Метаданные для машинной читаемости
+:project-name: VCAS Server Viewer
+:version: 1.0.0
+:last-updated: 2025-11-13
+:tags: [документация, навигация, обзор, визуализация, графики]
+:links: [overview.adoc, architecture/system-design.adoc, api/interfaces.adoc, guides/installation.adoc]
+
+== Обзор проекта
+
+VCAS Server Viewer - графическое приложение для просмотра архитектуры сервера каналов VCAS в системе ВЭПП-2000. Подробное описание в xref:overview.adoc[Общем описании проекта].
+
+== Архитектура системы
+
+=== Общая архитектура
+xref:architecture/system-design.adoc[Обзор компонентов и их взаимодействий].
+
+=== Компоненты
+* xref:components/MainWindow.adoc[MainWindow] - Главное окно приложения с двухпанельным интерфейсом.
+* xref:components/VCASClient.adoc[VCASClient] - Клиент для работы с VCAS сервером.
+* xref:components/MockVCASServer.adoc[MockVCASServer] - Тестовый сервер для отладки.
+* xref:components/Config.adoc[Config] - Конфигурация приложения с сохранением настроек.
+* xref:components/ChannelTreeWidget.adoc[ChannelTreeWidget] - Виджет дерева каналов с множественным выбором.
+* xref:components/ChannelTableWidget.adoc[ChannelTableWidget] - Таблица деталей каналов и директорий.
+* xref:components/NavigationHandler.adoc[NavigationHandler] - Обработчик навигации и клавиш.
+
+=== Модели данных
+* xref:components/ChannelData.adoc[ChannelData] - Модель данных канала с поддержкой временных рядов.
+
+=== Система визуализации
+* xref:components/PlotManager.adoc[PlotManager] - Центральный менеджер системы графиков.
+* xref:components/PlotDockWindow.adoc[PlotDockWindow] - Независимое окно с графиками каналов.
+* xref:components/PlotContainer.adoc[PlotContainer] - Контейнер для компоновки графиков.
+* xref:components/DraggablePlotWidget.adoc[DraggablePlotWidget] - Интерактивный виджет графика с drag-and-drop.
+
+=== Взаимодействия
+* xref:architecture/data-flow.adoc[Клиент-Сервер] - Взаимодействие VCASClient с сервером.
+* xref:architecture/data-flow.adoc[GUI-Клиент] - Взаимодействие GUI с клиентом.
+
+== API и протокол
+
+* xref:api/interfaces.adoc[VCAS Протокол] - Спецификация протокола VCAS.
+* xref:api/examples.adoc[Команды] - Доступные команды и их форматы.
+* xref:api/examples.adoc[Примеры] - Примеры запросов и ответов.
+
+== Руководства
+
+=== Установка и настройка
+* xref:guides/installation.adoc[Установка] - Инструкция по установке зависимостей.
+* xref:guides/installation.adoc[Конфигурация] - Настройка параметров приложения.
+
+=== Использование
+* xref:guides/user-guide.adoc[Запуск] - Как запустить приложение.
+* xref:guides/user-guide.adoc[Работа с интерфейсом] - Описание пользовательского интерфейса.
+* xref:guides/troubleshooting.adoc[Отладка] - Работа с тестовым сервером.
+
+=== Разработка
+* xref:development/setup.adoc[Структура кода] - Организация исходного кода.
+* xref:development/testing.adoc[Тестирование] - Тестирование компонентов.
+
+== Внутренние процессы
+
+* xref:development/setup.adoc[Инициализация] - Процесс запуска приложения.
+* xref:development/setup.adoc[Подключение] - Алгоритм подключения к серверу.
+* xref:development/setup.adoc[Парсинг каналов] - Парсинг и отображение структуры каналов.
+* xref:development/setup.adoc[Обработка сообщений] - Обработка входящих сообщений протокола.
+
+== Тестирование
+
+* xref:development/testing.adoc[test_dependencies] - Проверка зависимостей.
+* xref:development/testing.adoc[test_channels] - Тестирование структуры каналов.
+* xref:development/testing.adoc[debug_channels] - Диагностика каналов.
+
+== Изменения и обновления
+
+* xref:CHANGELOG.adoc[Журнал изменений] - История изменений документации.
+
+== Глоссарий
+
+* xref:glossary.adoc[Глоссарий терминов] - Определения ключевых терминов проекта.
+
+== Навигация по тегам
+
+* *архитектура* - Все документы по архитектуре.
+* *api* - Документация API и протокола.
+* *руководство* - Инструкции по использованию.
+* *процессы* - Внутренние алгоритмы.
+* *тестирование* - Тесты и отладка.
+
+== Ссылки на внешние ресурсы
+
+* Исходный код: `main.py`, `vcas_client.py`
+* README: `../README.md`
+* Требования: `../requirements.txt`

@@ -1,0 +1,9 @@
+{
+  "window_id": "plot_window_1",
+  "title": "Графики каналов",
+  "channels": [
+    "DEBUG/Timer"
+  ],
+  "time_window": 5,
+  "export_timestamp": "2025-11-14 00:49:31"
+}

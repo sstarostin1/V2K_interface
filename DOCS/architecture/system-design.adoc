@@ -1,0 +1,139 @@
+= Системная архитектура VCAS Server Viewer
+
+// Метаданные для машинной читаемости
+:component: system-design
+:tags: [архитектура, обзор, компоненты, взаимодействие, пакеты]
+:dependencies: [PyQt5, QTcpSocket, Python logging]
+:related: [components/MainWindow.adoc, components/VCASClient.adoc, components/MockVCASServer.adoc]
+
+== Структура пакетов
+
+Проект организован в виде Python пакета `vcas_viewer` со следующей структурой:
+
+```
+vcas_viewer/
+├── core/                      # Бизнес-логика и инфраструктура
+│   ├── vcas_client.py        # Клиент для работы с VCAS сервером
+│   ├── config.py             # Конфигурация приложения
+│   └── mock_vcas_server.py  # Тестовый сервер
+├── models/                    # Модели данных
+│   └── channel_data.py       # Модель данных канала
+├── gui/                       # Графический интерфейс
+│   ├── main_window.py        # Главное окно приложения
+│   └── widgets/              # Виджеты интерфейса
+│       ├── channel_tree_widget.py    # Дерево каналов
+│       ├── channel_info_widget.py    # Информация о канале
+│       └── navigation_handler.py     # Обработчик навигации
+├── plotting/                  # Система графиков
+│   ├── plot_manager.py        # Менеджер графиков
+│   ├── plot_container.py      # Контейнер графиков
+│   ├── plot_dock_window.py    # Доковое окно графиков
+│   └── draggable_plot_widget.py # Виджет графика
+└── main.py                    # Точка входа
+```
+
+== Основные компоненты
+
+=== Графический интерфейс (GUI)
+* **MainWindow** - главное окно приложения, координирует все компоненты.
+* **ChannelTreeWidget** - отображает каналы в древовидной структуре.
+* **ChannelInfoWidget** - показывает детальную информацию о выбранном канале.
+* **MenuBar и ToolBar** - элементы управления для подключения, обновления и т.д.
+
+=== Клиент для работы с сервером
+* **VCASClient** - отвечает за подключение к VCAS серверу, отправку команд и обработку ответов.
+* Использует протокол VCAS для обмена сообщениями в формате key:value|key:value.
+
+=== Конфигурация
+* **Config** - класс для управления настройками, такими как адреса серверов, размеры окон, интервалы обновления.
+
+=== Тестовый сервер
+* **MockVCASServer** - сервер-заглушка для отладки и тестирования, генерирует фиктивные данные каналов.
+
+=== Модели данных
+* **ChannelData** - контейнер данных канала с поддержкой временных рядов, сериализации и управления отображением.
+
+=== Система визуализации
+* **PlotManager** - центральный менеджер системы графиков, координирует окна и каналы.
+* **PlotDockWindow** - независимое доковое окно с графиками каналов.
+* **PlotContainer** - контейнер для компоновки и разделения областей графиков.
+* **DraggablePlotWidget** - интерактивный виджет графика с поддержкой drag-and-drop каналов.
+
+== Взаимодействия между компонентами
+
+=== GUI - Клиент
+MainWindow создает VCASClient и подключает сигналы (connected, channels_updated, error).
+При выборе канала в ChannelTreeWidget отправляется запрос на получение информации через VCASClient.
+VCASClient обновляет GUI через сигналы при получении данных.
+
+=== Клиент - Сервер
+VCASClient подключается к серверу по TCP, отправляет команды (get, getfull, set).
+Сервер отвечает сообщениями протокола, которые парсит VCASClient.
+
+=== Конфигурация
+Config предоставляет параметры для VCASClient (host, port) и MainWindow (размеры, интервалы).
+
+=== GUI - Система визуализации
+MainWindow создает PlotManager для управления окнами графиков.
+ChannelTreeWidget поддерживает drag-and-drop каналов на графики.
+PlotManager координирует получение данных каналов через VCASClient.
+
+=== Модели данных - Визуализация
+ChannelData хранит временные ряды и метаданные каналов.
+PlotManager использует ChannelData для обновления графиков в реальном времени.
+
+== Диаграмма архитектуры
+
+[plantuml, architecture-diagram, png]
+----
+@startuml
+[Пользователь] --> [MainWindow (GUI)]
+[MainWindow (GUI)] --> [PlotManager]
+[PlotManager] --> [PlotDockWindow(s)]
+[PlotManager] --> [ChannelData]
+[MainWindow (GUI)] --> [VCASClient]
+[VCASClient] --> [VCAS Server / MockVCASServer]
+[MainWindow (GUI)] --> [Config]
+[VCASClient] --> [Config]
+
+note right of VCASClient
+  Сигналы:
+  - connected
+  - disconnected
+  - channels_updated
+  - channel_info_updated
+  - channel_history_updated
+  - error
+end note
+
+note right of PlotManager
+  Сигналы:
+  - channel_data_updated
+  - plot_window_created
+  - plot_window_closed
+  - plot_window_settings_changed
+  - channels_changed
+end note
+@enduml
+----
+
+== Ключевые особенности
+
+* **Асинхронное взаимодействие**: Использование сигналов PyQt для обновления GUI без блокировки.
+* **Кэширование**: VCASClient кэширует информацию о каналах для быстрого доступа.
+* **Режим отладки**: Возможность работы с mock сервером для тестирования.
+* **Древовидная структура**: Парсинг имен каналов для создания иерархического отображения.
+* **Интерактивная визуализация**: Drag-and-drop каналов между графиками и окнами.
+* **Мульти-окно система**: Независимые окна графиков с сохранением данных при перемещении.
+* **Динамическая компоновка**: Разделение и объединение областей графиков без потери данных.
+* **Временные ряды**: Поддержка исторических данных каналов с настраиваемым окном времени.
+
+== Технологический стек
+
+* **Язык**: Python 3.7+
+* **GUI**: PyQt5
+* **Сеть**: QTcpSocket для TCP соединений
+* **Протокол**: Кастомный текстовый протокол VCAS
+* **Логирование**: Python logging для отладки
+
+Подробное описание каждого компонента в xref:components/[Компоненты].

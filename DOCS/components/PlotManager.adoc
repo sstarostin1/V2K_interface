@@ -1,0 +1,84 @@
+= PlotManager
+
+// Метаданные для машинной читаемости
+:component: PlotManager
+:tags: [компонент, plotmanager, графики, менеджер, данные]
+:dependencies: [PyQt5.QtCore, ChannelData, PlotDockWindow]
+:related: [components/MainWindow.adoc, components/ChannelData.adoc, components/PlotDockWindow.adoc]
+
+== Назначение
+
+PlotManager - центральный менеджер системы визуализации данных каналов VCAS. Координирует создание и управление окнами графиков, управление данными каналов, подписки на обновления и взаимодействие с VCAS клиентом.
+
+== Основные функции
+
+* Управление окнами графиков (создание, закрытие, переименование)
+* Хранение и управление данными каналов ChannelData
+* Координация подписок на каналы между окнами графиков
+* Получение данных каналов через VCAS клиент
+* Экспорт данных и конфигураций окон
+* Создание скриншотов окон графиков
+
+== Структура класса
+
+=== Атрибуты
+* **vcas_client**: Ссылка на VCAS клиент для запроса данных
+* **plot_windows**: Словарь окон графиков window_id -> PlotDockWindow
+* **channel_data**: Словарь данных каналов channel_name -> ChannelData
+* **channel_subscriptions**: Словарь подписок channel_name -> set(window_ids)
+* **update_timer**: QTimer для периодического обновления данных
+* **max_windows**: Максимальное количество окон графиков
+* **max_points_per_channel**: Максимальное количество точек на канал
+
+=== Сигналы
+* **channel_data_updated(channel_name, channel_data)**: Обновление данных канала
+* **plot_window_created(plot_window)**: Создание нового окна графиков
+* **plot_window_closed(plot_window)**: Закрытие окна графиков
+* **plot_window_settings_changed(plot_window)**: Изменение настроек окна
+* **channels_changed(window_id)**: Изменение каналов в окне
+
+=== Основные методы
+
+==== Управление окнами
+* **create_plot_window(title)**: Создание нового окна графиков
+* **close_plot_window(plot_window)**: Закрытие окна графиков
+* **rename_window(window_id, new_title)**: Переименование окна
+
+==== Управление каналами
+* **add_channel_to_window(channel_name, plot_window)**: Добавление канала в окно
+* **remove_channel_from_window(channel_name, plot_window)**: Удаление канала из окна
+* **get_or_create_channel_data(channel_name)**: Получение или создание данных канала
+
+==== Обработка данных
+* **update_channel_info(channel_name, info)**: Обновление метаданных канала
+* **_request_channel_data(channel_name)**: Запрос данных канала у VCAS клиента
+
+==== Экспорт и сохранение
+* **export_channel_data(channel_name)**: Экспорт данных канала
+* **export_window_data(window_id, time_range)**: Экспорт данных окна в CSV
+* **export_window_config(window_id)**: Экспорт конфигурации окна
+* **save_window_config_to_file(window_id, directory)**: Сохранение конфигурации в файл
+* **save_window_screenshot(window_id, directory)**: Создание скриншота окна
+* **load_window_config_from_file(filepath)**: Загрузка конфигурации из файла
+* **get_saved_configs_list(directory)**: Получение списка сохраненных конфигураций
+
+== Взаимодействия
+
+* **С VCASClient**: Получает обновления данных через сигналы channel_history_updated и channel_info_updated
+* **С PlotDockWindow**: Управляет жизненным циклом окон, получает запросы на данные каналов
+* **С MainWindow**: Создает окна графиков, координирует drag-and-drop каналов
+* **С ChannelData**: Хранит и управляет экземплярами объектов данных каналов
+
+== Диаграмма архитектуры
+
+[plantuml, plotmanager-arch, png]
+----
+@startuml
+PlotManager -> VCASClient: subscribe/unsubscribe channels
+VCASClient -> PlotManager: channel_info_updated, channel_history_updated
+PlotManager -> PlotDockWindow: add_channel/remove_channel
+PlotDockWindow -> PlotManager: channel_requested
+PlotManager -> ChannelData: update data, store metadata
+ChannelData -> PlotDockWindow: provide data arrays for plotting
+@enduml
+----

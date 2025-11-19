@@ -1,0 +1,12 @@
+2025-11-14 20:06:30 - VCASClient - ERROR - Ошибка сокета: Connection refused
+2025-11-14 20:06:30 - VCASClient - ERROR - Ошибка сокета: Connection refused
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - Session ended at 2025-11-14 20:06:37,219
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - ============================================================
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - ------------------
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - ERROR      | 1
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - INFO       | 2
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - ------------------
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - TOTAL      | 3
+2025-11-14 20:06:37 - VCAS.Session.End - INFO - ============================================================

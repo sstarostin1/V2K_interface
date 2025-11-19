@@ -1,0 +1,11 @@
+{
+  "window_id": "plot_window_1",
+  "title": "Графики каналов",
+  "channels": [
+    "BEP/Currents/ePMT",
+    "BEP/Currents/pBPM",
+    "BEP/Currents/pPMT"
+  ],
+  "time_window": 5,
+  "export_timestamp": "2025-11-14 00:33:55"
+}

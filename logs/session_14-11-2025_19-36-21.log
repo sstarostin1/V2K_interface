@@ -1,0 +1,21 @@
+2025-11-14 19:36:21 - VCAS.Session - INFO - Session started - console: minimal, file: trace
+2025-11-14 19:36:21 - VCAS.Session - INFO - Log file: d:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_19-36-21.log
+2025-11-14 19:36:21 - Test - DEBUG - Это debug сообщение
+2025-11-14 19:36:21 - Test - INFO - Это info сообщение
+2025-11-14 19:36:21 - Test - WARNING - Это warning сообщение
+2025-11-14 19:36:21 - Test - ERROR - Это error сообщение
+2025-11-14 19:36:21 - Test - CRITICAL - Это critical сообщение
+2025-11-14 19:36:21 - Test.Other - WARNING - Другое warning сообщение
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - Session ended at 2025-11-14 19:36:21,756
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - ============================================================
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - ------------------
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - CRITICAL   | 1
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - DEBUG      | 1
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - ERROR      | 1
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - INFO       | 5
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - WARNING    | 2
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - ------------------
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - TOTAL      | 10
+2025-11-14 19:36:21 - VCAS.Session.End - INFO - ============================================================

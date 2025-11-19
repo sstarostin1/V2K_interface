@@ -1,0 +1,133 @@
+= VCASClient
+
+// Метаданные для машинной читаемости
+:component: VCASClient
+:tags: [компонент, vcasclient, сеть, протокол, клиент]
+:dependencies: [PyQt5.QtNetwork, QTcpSocket, Config]
+:related: [api/interfaces.adoc, components/MainWindow.adoc, components/Config.adoc]
+
+== Назначение
+
+VCASClient - класс для взаимодействия с VCAS сервером по протоколу VCAS. Наследуется от QObject и использует QTcpSocket для TCP соединений.
+
+== Основные функции
+
+* Подключение к VCAS серверу (реальному или mock)
+* Отправка команд протокола VCAS (get, getfull, set, subscribe)
+* Получение и парсинг ответов сервера
+* Кэширование информации о каналах для быстрого доступа
+* Периодическое обновление списка каналов
+
+== Структура класса
+
+=== Атрибуты
+* **host, port**: Адрес и порт сервера
+* **is_connected**: Флаг состояния подключения
+* **socket**: Экземпляр QTcpSocket для соединения
+* **channels_list**: Список доступных каналов
+* **channel_info_cache**: Кэш детальной информации о каналах
+* **pending_requests**: Словарь для отслеживания запросов
+* **logger**: Логгер для записи событий
+* **update_timer**: QTimer для периодического обновления каналов
+* **buffer**: QByteArray для буферизации входящих данных
+
+=== Сигналы
+* **connected**: Сигнал успешного подключения
+* **disconnected**: Сигнал отключения
+* **error(str)**: Сигнал ошибки с сообщением
+* **channels_updated(list)**: Сигнал обновления списка каналов
+* **channel_info_updated(dict)**: Сигнал обновления информации о канале
+* **channel_history_updated(dict)**: Сигнал обновления исторических данных канала
+
+=== Основные методы
+
+==== Подключение и отключение
+* **connect_to_server()**: Создание сокета, подключение к серверу, настройка обработчиков
+* **disconnect_from_server()**: Остановка таймера, закрытие сокета
+
+==== Отправка команд
+* **_send_command(channel_name, method, **kwargs)**: Формирование и отправка команды в формате VCAS
+* **get_channels_list()**: Запрос списка каналов (ChannelsList get)
+* **get_channel_info(channel_name)**: Запрос детальной информации о канале (getfull)
+* **get_channel_history(channel_name, duration_seconds)**: Запрос исторических данных канала (gethistory)
+* **get_multiple_channel_info(channels_list)**: Запрос информации о нескольких каналах
+* **refresh_channels()**: Обновление списка каналов
+* **clear_cache()**: Очистка кэша каналов
+* **force_refresh_channels()**: Обновление с очисткой кэша
+
+==== Обработка данных
+* **_on_ready_read()**: Чтение данных из сокета, добавление в буфер
+* **_process_buffer()**: Обработка буфера, поиск завершающих \n
+* **_process_message(message)**: Парсинг сообщения на пары key:value
+* **_handle_message(msg_dict)**: Обработка распарсенного сообщения
+* **_handle_channels_list(msg_dict)**: Обработка ответа со списком каналов
+* **_handle_channel_info(msg_dict)**: Обработка ответа с информацией о канале
+
+==== Периодическое обновление
+* **_update_channels()**: Периодический запрос списка каналов (каждые 30 секунд)
+
+== Протокол VCAS
+
+VCASClient работает с текстовым протоколом:
+
+* Команда: `name:ChannelsList|method:get\n`
+* Ответ: `name:ChannelsList|val:channel1,channel2,channel3\n`
+
+Подробности в xref:api/interfaces.adoc[VCAS Протокол].
+
+== Взаимодействия
+
+* **С MainWindow**: Через сигналы connected, channels_updated, error
+* **С Config**: Получает host и port из Config.get_vcas_address()
+* **С сервером**: TCP соединение, обмен сообщениями протокола
+
+== Диаграмма последовательности
+
+[plantuml, vcasclient-sequence, png]
+----
+@startuml
+MainWindow -> VCASClient: connect_to_server()
+VCASClient -> QTcpSocket: connectToHost(host, port)
+QTcpSocket -> VCASClient: connected
+VCASClient -> MainWindow: сигнал connected
+MainWindow -> VCASClient: get_channels_list()
+VCASClient -> Сервер: name:ChannelsList|method:get\n
+Сервер -> VCASClient: name:ChannelsList|val:...\n
+VCASClient -> MainWindow: channels_updated
+@enduml
+----
+
+== Зависимости
+
+* PyQt5.QtCore: QObject, pyqtSignal, QTimer, QByteArray
+* PyQt5.QtNetwork: QTcpSocket, QAbstractSocket
+* logging
+
+== Кэширование
+
+* **channels_list**: Список каналов обновляется при получении
+* **channel_info_cache**: Кэш для детальной информации, проверяется перед запросом
+
+== Обработка ошибок
+
+* Сигнал error для передачи ошибок в GUI
+* Логирование всех событий и ошибок
+* Graceful отключение при ошибках
+
+== Примеры использования
+
+[source,python]
+----
+// Создание клиента
+client = VCASClient("127.0.0.1", 20042)
+client.connect_to_server()
+
+// Подключение сигналов
+client.channels_updated.connect(update_tree)
+----
+
+Связанные компоненты:
+
+* xref:components/MainWindow.adoc[MainWindow] - главный интерфейс
+* xref:components/Config.adoc[Config] - конфигурация
+* xref:api/interfaces.adoc[Протокол VCAS] - спецификация протокола

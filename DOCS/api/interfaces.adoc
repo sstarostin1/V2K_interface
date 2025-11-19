@@ -1,0 +1,94 @@
+= Интерфейсы и протокол VCAS
+
+// Метаданные для машинной читаемости
+:component: interfaces
+:tags: [api, протокол, vcas, команды, интерфейсы]
+:dependencies: [TCP, UTF-8]
+:related: [architecture/data-flow.adoc, components/VCASClient.adoc, components/MockVCASServer.adoc]
+
+== Формат сообщений
+
+=== Команда клиента
+```
+key1:value1|key2:value2|...|keyN:valueN\n
+```
+
+=== Ответ сервера
+```
+key1:value1|key2:value2|...|keyN:valueN\n
+```
+
+== Основные команды
+
+=== Получение списка каналов
+* **Команда**: `name:ChannelsList|method:get\n`
+* **Ответ**: `name:ChannelsList|val:channel1,channel2,channel3,...\n`
+* **Описание**: Возвращает список всех доступных каналов, разделенных запятыми.
+
+=== Получение значения канала
+* **Команда**: `name:channel_name|method:get\n`
+* **Ответ**: `name:channel_name|time:timestamp|val:value\n`
+* **Описание**: Возвращает текущее значение канала с временной меткой.
+
+=== Получение полной информации о канале
+* **Команда**: `name:channel_name|method:getfull\n`
+* **Ответ**: `name:channel_name|type:rw|units:units|descr:description|val:value|host:host|port:port\n`
+* **Описание**: Возвращает полную информацию о канале: тип доступа, единицы, описание, значение, хост, порт.
+
+=== Установка значения канала
+* **Команда**: `name:channel_name|method:set|val:new_value\n`
+* **Ответ**: (пустой, если успешно) или `value:error|descr:error_message\n`
+* **Описание**: Устанавливает новое значение канала. Только для каналов с типом `rw`.
+
+=== Подписка на канал
+* **Команда**: `name:channel_name|method:subscribe\n`
+* **Ответ**: (пустой, если успешно)
+* **Описание**: Подписывается на обновления канала. Сервер может отправлять обновления.
+
+== Типы каналов
+
+* **ro (read-only)**: Только чтение, значение обновляется сервером.
+* **rw (read-write)**: Чтение и запись, можно устанавливать значение.
+* **ex (exclusive)**: Эксклюзивный доступ, специальный тип.
+
+== Примеры
+
+=== Пример 1: Список каналов
+```
+Клиент -> Сервер: name:ChannelsList|method:get\n
+Сервер -> Клиент: name:ChannelsList|val:VEPP/FZ_tau,VEPP/Energy,BEP/Currents/pPMT\n
+```
+
+=== Пример 2: Информация о канале
+```
+Клиент -> Сервер: name:VEPP/Energy|method:getfull\n
+Сервер -> Клиент: name:VEPP/Energy|type:ro|units:MeV|descr:Энергия пучка|val:1850.5|host:172.16.1.110|port:20041\n
+```
+
+=== Пример 3: Установка значения
+```
+Клиент -> Сервер: name:VEPP/FZ_tau|method:set|val:1000\n
+Сервер -> Клиент: (пустой ответ - успех)
+```
+
+== Обработка ошибок
+
+* **Некорректная команда**: `value:error|descr:Invalid command format\n`
+* **Несуществующий канал**: `value:error|descr:Channel 'name' not found\n`
+* **Недостаточно прав**: `value:error|descr:Access denied for channel 'name'\n`
+
+== Кодировка
+
+* Все сообщения в UTF-8.
+* Специальные символы в описаниях поддерживаются.
+
+== Реализация
+
+* **VCASClient**: Отправляет команды, парсит ответы.
+* **MockVCASServer**: Имитирует протокол для тестирования.
+
+Связанные документы:
+
+* xref:architecture/data-flow.adoc[Потоки данных] - описание взаимодействий.
+* xref:components/VCASClient.adoc[VCASClient] - реализация клиента.
+* xref:components/MockVCASServer.adoc[MockVCASServer] - реализация mock сервера.

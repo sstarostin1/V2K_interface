@@ -1,0 +1,94 @@
+= PlotWindowsManager
+
+// Метаданные для машинной читаемости
+:component: PlotWindowsManager
+:tags: [компонент, plotwindowsmanager, gui, pyqt5, управление, окна, графики]
+:dependencies: [PyQt5.QtWidgets, PlotManager, RenameWindowDialog]
+:related: [architecture/system-design.adoc, components/MainWindow.adoc, components/PlotManager.adoc]
+
+== Назначение
+
+PlotWindowsManager - виджет управления окнами графиков в главном окне приложения VCAS Server Viewer. Предоставляет интерфейс для просмотра, создания, переименования и закрытия окон графиков.
+
+== Основные функции
+
+* Отображение списка всех открытых окон графиков с их настройками
+* Создание новых окон графиков
+* Переименование существующих окон
+* Закрытие окон графиков
+* Автоматическое обновление списка при изменениях
+
+== Структура класса
+
+=== Атрибуты
+* **plot_manager**: Ссылка на PlotManager для управления окнами
+* **windows_list**: QListWidget для отображения списка окон
+* **create_button**: Кнопка создания нового окна
+
+=== Основные методы
+
+==== Инициализация
+* **__init__(plot_manager)**: Конструктор с настройкой интерфейса и соединений
+* **setup_ui()**: Создание пользовательского интерфейса
+* **setup_connections()**: Подключение сигналов
+
+==== Управление списком окон
+* **update_windows_list()**: Обновление списка окон графиков
+* **_add_window_item(window_info)**: Добавление элемента окна в список
+
+==== Действия с окнами
+* **_create_new_window()**: Создание нового окна графика
+* **_rename_window(window_id)**: Переименование окна с диалогом
+* **_close_window(window_id)**: Закрытие окна с подтверждением
+
+==== Обработчики сигналов
+* **_on_window_created(plot_window)**: Обновление списка при создании окна
+* **_on_window_closed(plot_window)**: Обновление списка при закрытии окна
+
+== Взаимодействия
+
+* **С PlotManager**: Получение информации об окнах, управление окнами через сигналы
+* **С MainWindow**: Интеграция в систему переключения режимов правой панели
+* **С RenameWindowDialog**: Диалог для переименования окон
+
+== Диаграмма последовательности
+
+[plantuml, plotwindowsmanager-sequence, png]
+----
+@startuml
+Пользователь -> MainWindow: Нажатие кнопки "Графики"
+MainWindow -> PlotWindowsManager: Переключение в режим управления
+PlotWindowsManager -> PlotManager: get_all_windows_info()
+PlotManager -> PlotWindowsManager: Возврат списка окон
+PlotWindowsManager -> QListWidget: Обновление списка
+
+Пользователь -> PlotWindowsManager: Нажатие "Создать новое окно"
+PlotWindowsManager -> PlotManager: create_plot_window()
+PlotManager -> MainWindow: plot_window_created
+MainWindow -> PlotWindowsManager: _on_window_created()
+@enduml
+----
+
+== Зависимости
+
+* PyQt5.QtWidgets: QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QPushButton, QMessageBox
+* PyQt5.QtCore: Qt, pyqtSignal
+* plot_manager: PlotManager
+* rename_window_dialog: RenameWindowDialog
+
+== Примеры использования
+
+[source,python]
+----
+# Создание виджета управления окнами
+plot_manager = PlotManager(vcas_client)
+windows_manager = PlotWindowsManagerWidget(plot_manager)
+
+# Добавление в layout
+layout.addWidget(windows_manager)
+----
+
+Связанные компоненты:
+
+* xref:components/MainWindow.adoc[MainWindow] - главное окно приложения
+* xref:components/PlotManager.adoc[PlotManager] - менеджер графиков

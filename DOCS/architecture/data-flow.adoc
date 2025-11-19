@@ -1,0 +1,95 @@
+= Потоки данных и взаимодействия
+
+// Метаданные для машинной читаемости
+:component: data-flow
+:tags: [взаимодействие, клиент, сервер, протокол, потоки]
+:dependencies: [PyQt5.QtNetwork, QTcpSocket]
+:related: [api/interfaces.adoc, components/VCASClient.adoc, components/MockVCASServer.adoc]
+
+== Обзор взаимодействия Клиент-Сервер
+
+VCASClient подключается к серверу по TCP, отправляет команды в текстовом формате и получает ответы. Сервер отвечает на запросы, предоставляя данные о каналах.
+
+== Протокол VCAS
+
+Протокол использует текстовый формат:
+
+* *Команда*: `key1:value1|key2:value2\n`
+* *Ответ*: аналогичный формат.
+
+Подробности в xref:api/interfaces.adoc[VCAS Протокол].
+
+== Этапы взаимодействия
+
+=== Подключение
+* VCASClient создает QTcpSocket.
+* Подключается к host:port из Config.
+* При успешном подключении отправляет сигнал `connected`.
+
+=== Запрос списка каналов
+* MainWindow получает `connected`, вызывает `get_channels_list()`.
+* VCASClient отправляет: `name:ChannelsList|method:get\n`
+* Сервер отвечает: `name:ChannelsList|val:channel1,channel2,...\n`
+* VCASClient парсит, обновляет `channels_list`, отправляет `channels_updated`.
+
+=== Запрос информации о канале
+* Пользователь выбирает канал в ChannelTreeWidget.
+* ChannelTreeWidget отправляет `channel_selected`.
+* MainWindow вызывает `get_channel_info(channel_name)`.
+* VCASClient отправляет: `name:channel_name|method:getfull\n`
+* Сервер отвечает: `name:channel_name|type:rw|units:V|descr:...|val:...\n`
+* VCASClient парсит, кэширует, отправляет `channel_info_updated`.
+
+=== Периодическое обновление
+* VCASClient запускает QTimer на 30 секунд.
+* Каждые 30 секунд отправляет ChannelsList get.
+* Обновляет `channels_list` и отправляет `channels_updated`.
+
+=== Отключение
+* MainWindow вызывает `disconnect_from_server()`.
+* VCASClient останавливает таймер, закрывает сокет.
+* Отправляет сигнал `disconnected`.
+
+== Обработка ошибок
+
+* **Сетевые ошибки**: QTcpSocket отправляет `error` сигнал, VCASClient пересылает в GUI.
+* **Некорректные ответы**: VCASClient логирует, игнорирует.
+* **Отсутствие канала**: Сервер отвечает `error`, VCASClient пересылает.
+
+== Диаграмма последовательности
+
+[plantuml, sequence-diagram, png]
+----
+@startuml
+MainWindow -> VCASClient: connect_to_server()
+VCASClient -> Server: TCP connect
+Server -> VCASClient: connected
+VCASClient -> MainWindow: connected signal
+MainWindow -> VCASClient: get_channels_list()
+VCASClient -> Server: name:ChannelsList|method:get\n
+Server -> VCASClient: name:ChannelsList|val:...\n
+VCASClient -> MainWindow: channels_updated signal
+@enduml
+----
+
+== Режимы работы
+
+* **Реальный сервер**: Подключение к `172.16.1.110:20041`.
+* **Mock сервер**: Подключение к `127.0.0.1:20042`, тестовые данные.
+
+== Кэширование
+
+* VCASClient кэширует `channel_info` для быстрого доступа.
+* Проверяет кэш перед отправкой `getfull`.
+
+== Логирование
+
+* Все команды и ответы логируются в `vcas_viewer.log`.
+* Уровень DEBUG для детальной отладки.
+
+== Зависимости
+
+* PyQt5.QtNetwork: QTcpSocket.
+* logging: Для записи событий.
+
+Подробности в xref:components/VCASClient.adoc[VCASClient] и xref:components/MockVCASServer.adoc[MockVCASServer].

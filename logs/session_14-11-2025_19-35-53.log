@@ -1,0 +1,11 @@
+2025-11-14 19:35:53 - VCAS.Session - INFO - Session started - console: minimal, file: trace
+2025-11-14 19:35:53 - VCAS.Session - INFO - Log file: d:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_19-35-53.log
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - Session ended at 2025-11-14 19:35:53,565
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - ============================================================
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - ------------------
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - INFO       | 4
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - ------------------
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - TOTAL      | 4
+2025-11-14 19:35:53 - VCAS.Session.End - INFO - ============================================================

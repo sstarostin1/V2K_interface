@@ -1,0 +1,27 @@
+2025-11-14 22:38:10 - VCAS.Session - INFO - Session started - console: minimal, file: concise
+2025-11-14 22:38:10 - VCAS.Session - INFO - Log file: D:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_22-38-10.log
+2025-11-14 22:38:10 - VCAS.Session - INFO - Session started - console: minimal, file: concise
+2025-11-14 22:38:10 - VCAS.Session - INFO - Session started - console: minimal, file: concise
+2025-11-14 22:38:10 - VCAS.Session - INFO - Log file: D:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_22-38-10.log
+2025-11-14 22:38:10 - VCAS.Session - INFO - Log file: D:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_22-38-10.log
+2025-11-14 22:38:11 - MainWindow - INFO - Менеджер графиков создан
+2025-11-14 22:38:11 - MainWindow - INFO - Менеджер графиков создан
+2025-11-14 22:38:11 - MainWindow - INFO - Виджет управления окнами графиков создан
+2025-11-14 22:38:11 - MainWindow - INFO - Виджет управления окнами графиков создан
+2025-11-14 22:38:12 - MainWindow - INFO - Подключение к реальному серверу 172.16.1.110:20041
+2025-11-14 22:38:12 - MainWindow - INFO - Подключение к реальному серверу 172.16.1.110:20041
+2025-11-14 22:38:12 - VCASClient - INFO - Подключение к VCAS серверу 172.16.1.110:20041
+2025-11-14 22:38:12 - VCASClient - INFO - Подключение к VCAS серверу 172.16.1.110:20041
+2025-11-14 22:38:27 - VCASClient - INFO - Отключено от VCAS сервера
+2025-11-14 22:38:27 - VCASClient - INFO - Отключено от VCAS сервера
+2025-11-14 22:38:27 - PlotManager - INFO - Все данные каналов очищены
+2025-11-14 22:38:27 - PlotManager - INFO - Все данные каналов очищены
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - Session ended at 2025-11-14 22:38:27,264
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - ============================================================
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - ------------------
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - INFO       | 10
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - ------------------
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - TOTAL      | 10
+2025-11-14 22:38:27 - VCAS.Session.End - INFO - ============================================================

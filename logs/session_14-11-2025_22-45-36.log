@@ -1,0 +1,22 @@
+2025-11-14 22:45:36 - VCAS.Session - INFO - Session started - console: minimal, file: trace
+2025-11-14 22:45:36 - VCAS.Session - INFO - Log file: D:\soft\!!!samodel\VEPP-2000_dela\!server_viewer\logs\session_14-11-2025_22-45-36.log
+2025-11-14 22:45:37 - MainWindow - INFO - Менеджер графиков создан
+2025-11-14 22:45:37 - PlotWindowsManagerWidget - DEBUG - Обновлен список окон: 0 окон
+2025-11-14 22:45:37 - MainWindow - INFO - Виджет управления окнами графиков создан
+2025-11-14 22:45:38 - MainWindow - INFO - Подключение к реальному серверу 172.16.1.110:20041
+2025-11-14 22:45:38 - VCASClient - INFO - Подключение к VCAS серверу 172.16.1.110:20041
+2025-11-14 22:45:38 - VCASClient - DEBUG - Состояние сокета изменено: 1
+2025-11-14 22:45:38 - VCASClient - DEBUG - Состояние сокета изменено: 2
+2025-11-14 22:45:46 - VCASClient - DEBUG - Состояние сокета изменено: 0
+2025-11-14 22:45:47 - VCASClient - INFO - Отключено от VCAS сервера
+2025-11-14 22:45:47 - PlotManager - INFO - Все данные каналов очищены
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - Session ended at 2025-11-14 22:45:47,873
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - ============================================================
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - ------------------
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - DEBUG      | 4
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - INFO       | 10
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - ------------------
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - TOTAL      | 14
+2025-11-14 22:45:47 - VCAS.Session.End - INFO - ============================================================

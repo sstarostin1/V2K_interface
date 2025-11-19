@@ -1,0 +1,11 @@
+2025-11-15 09:59:27,770 - VCASClient - ERROR - Ошибка сокета: Connection timed out
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - Session ended at 2025-11-15 10:12:17,752
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - ============================================================
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - Session Statistics:
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - LEVEL      | COUNT
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - ------------------
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - ERROR      | 1
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - INFO       | 2
+2025-11-15 10:12:17,752 - VCAS.Session.End - INFO - ------------------
+2025-11-15 10:12:17,753 - VCAS.Session.End - INFO - TOTAL      | 3
+2025-11-15 10:12:17,753 - VCAS.Session.End - INFO - ============================================================
